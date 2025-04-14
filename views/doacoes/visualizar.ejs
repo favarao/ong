@@ -1,0 +1,89 @@
+<div class="container">
+    <h1 class="mb-4">Detalhes da Doação</h1>
+    
+    <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="alert alert-danger">
+            <%= erro %>
+        </div>
+        <a href="/doacoes" class="btn btn-secondary">Voltar para Listagem</a>
+    <% } else { %>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados da Doação</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ID da Doação:</strong>
+                        <p><%= doacao.doacaoId %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Data:</strong>
+                        <p><%= new Date(doacao.doacaoData).toLocaleDateString('pt-BR') %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Valor em Dinheiro:</strong>
+                        <p>R$ <%= parseFloat(doacao.doacaoValor).toFixed(2) %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Status:</strong>
+                        <p><%= doacao.doacaoStatus %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados do Doador</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Nome:</strong>
+                        <p><%= doacao.doadorNome %></p>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>ID do Doador:</strong>
+                        <p><%= doacao.doadorId %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Produtos Doados</h4>
+            </div>
+            <div class="card-body">
+                <% if (itens && itens.length > 0) { %>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID do Produto</th>
+                                <th>Nome do Produto</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < itens.length; i++) { %>
+                                <tr>
+                                    <td><%= itens[i].produtoId %></td>
+                                    <td><%= itens[i].produtoNome %></td>
+                                    <td><%= itens[i].doacaoItemQuantidade %></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p>Nenhum produto foi incluído nesta doação.</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <a href="/doacoes" class="btn btn-secondary">Voltar para Listagem</a>
+            <a href="/doacoes/cadastrar" class="btn btn-primary">Agendar Nova Doação</a>
+        </div>
+    <% } %>
+</div>

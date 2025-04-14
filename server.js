@@ -13,6 +13,7 @@ const patrimonioRoute = require('./routes/patrimonioRoute');
 const AuthMiddleware = require('./middlewares/authMiddleware');
 const cookieParser = require('cookie-parser');
 const projetoRoute = require('./routes/projetoRoute');
+const doacaoRoute = require('./routes/doacaoRoute');
 // Cria uma instância do aplicativo Express
 const app = express();
 
@@ -54,6 +55,8 @@ app.use("/pedidos", pedidoRoute);
 app.use("/pedidosPatrimonio", pedidoPatrimonioRoute);
 app.use('/patrimonios', patrimonioRoute);
 app.use('/projetos', projetoRoute);
+app.use('/doacoes', doacaoRoute);
+
 
 // Apenas a rota de eventos requer perfil admin
 app.use('/eventos', auth.verificarAdmin.bind(auth), eventoRoute);

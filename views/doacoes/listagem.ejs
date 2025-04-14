@@ -1,0 +1,40 @@
+<script src="/js/doacoes/listagem.js"></script>
+
+<h1 class="text-secondary">Doações Agendadas</h1>
+
+<a class="btn btn-primary" style="max-width: 200px;" href="/doacoes/cadastrar">Nova Doação</a>
+
+<hr>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Doador</th>
+                <th scope="col">Data</th>
+                <th scope="col">Valor (R$)</th>
+                <th scope="col">Status</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].doacaoId %></td>
+                    <td><%= lista[i].doadorNome %></td>
+                    <td><%= new Date(lista[i].doacaoData).toLocaleDateString('pt-BR') %></td>
+                    <td><%= parseFloat(lista[i].doacaoValor).toFixed(2) %></td>
+                    <td><%= lista[i].doacaoStatus %></td>
+                    <td>
+                        <a href="/doacoes/visualizar/<%= lista[i].doacaoId %>" class="btn btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button data-codigoexclusao="<%= lista[i].doacaoId %>" class="btn btn-danger btnExclusao">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

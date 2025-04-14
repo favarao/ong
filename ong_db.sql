@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Tempo de geração: 26/02/2025 às 20:17
+-- Tempo de geração: 14/04/2025 às 15:18
 -- Versão do servidor: 8.0.35
 -- Versão do PHP: 8.2.13
 
@@ -24,6 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `doacao`
+--
+
+CREATE TABLE `doacao` (
+  `id_doacao` int NOT NULL,
+  `doador_id` int NOT NULL,
+  `data` date NOT NULL,
+  `valor` decimal(10,2) DEFAULT '0.00',
+  `status` varchar(50) DEFAULT 'Agendada'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `doacao`
+--
+
+INSERT INTO `doacao` (`id_doacao`, `doador_id`, `data`, `valor`, `status`) VALUES
+(1, 7, '2025-04-14', 0.00, 'Agendada');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `doacao_item`
+--
+
+CREATE TABLE `doacao_item` (
+  `id_doacao_item` int NOT NULL,
+  `doacao_id` int NOT NULL,
+  `produto_id` int NOT NULL,
+  `quantidade` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `doacao_item`
+--
+
+INSERT INTO `doacao_item` (`id_doacao_item`, `doacao_id`, `produto_id`, `quantidade`) VALUES
+(1, 1, 3, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `doador`
 --
 
@@ -37,16 +78,17 @@ CREATE TABLE `doador` (
   `senha` varchar(255) NOT NULL,
   `telefone` varchar(15) NOT NULL,
   `endereco` varchar(255) NOT NULL,
-  `CEP` varchar(10) NOT NULL
+  `CEP` varchar(10) NOT NULL,
+  `admin` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Despejando dados para a tabela `doador`
 --
 
-INSERT INTO `doador` (`id_doador`, `nome`, `CPF`, `RG`, `sexo`, `email`, `senha`, `telefone`, `endereco`, `CEP`) VALUES
-(2, 'Joao', '256.473.770-68', '41.926.624-0', 'M', 'joao@gmail.com', '123', '(18) 99790-6467', 'Rua das Flores, 123', '19010-999'),
-(7, 'Lucas', '256.473.770-64', '41.926.624-9', 'M', 'lucas@email.com', '111', '(18) 99790-6467', 'Rua das Flores, 123', '19010-999');
+INSERT INTO `doador` (`id_doador`, `nome`, `CPF`, `RG`, `sexo`, `email`, `senha`, `telefone`, `endereco`, `CEP`, `admin`) VALUES
+(2, 'Joao', '256.473.770-68', '41.926.624-0', 'M', 'favaraovieira@gmail.com', '6467', '(18) 99790-6467', 'Rua das Flores, 123', '19010-999', 1),
+(7, 'Lucas', '256.473.770-64', '41.926.624-9', 'M', 'lucas@email.com', '111', '(18) 99790-6467', 'Rua das Flores, 123', '19010-999', 0);
 
 -- --------------------------------------------------------
 
@@ -108,7 +150,8 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`ped_id`, `ped_data`) VALUES
-(1, '2025-02-26 13:06:59');
+(1, '2025-02-26 13:06:59'),
+(2, '2025-02-27 15:59:46');
 
 -- --------------------------------------------------------
 
@@ -140,7 +183,8 @@ CREATE TABLE `produto` (
 --
 
 INSERT INTO `produto` (`id_produto`, `nome`, `descricao`, `preco`, `quantidade`) VALUES
-(2, 'Camisa de algodo', 'Bem fofinha', 150.00, 50);
+(2, 'Camisa de algodo', 'Bem fofinha', 150.00, 49),
+(3, 'Sapato', 'Sapato de couro', 230.00, 20);
 
 -- --------------------------------------------------------
 
@@ -181,6 +225,14 @@ CREATE TABLE `tb_pedidoitens` (
   `pit_valortotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Despejando dados para a tabela `tb_pedidoitens`
+--
+
+INSERT INTO `tb_pedidoitens` (`pit_id`, `ped_id`, `id_produto`, `pit_quantidade`, `pit_valorunitario`, `pit_valortotal`) VALUES
+(1, 2, 2, 1, 150.00, 150.00),
+(2, 2, 3, 1, 230.00, 230.00);
+
 -- --------------------------------------------------------
 
 --
@@ -197,6 +249,21 @@ CREATE TABLE `tb_pedidoitenspatrimonio` (
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices de tabela `doacao`
+--
+ALTER TABLE `doacao`
+  ADD PRIMARY KEY (`id_doacao`),
+  ADD KEY `doador_id` (`doador_id`);
+
+--
+-- Índices de tabela `doacao_item`
+--
+ALTER TABLE `doacao_item`
+  ADD PRIMARY KEY (`id_doacao_item`),
+  ADD KEY `doacao_id` (`doacao_id`),
+  ADD KEY `produto_id` (`produto_id`);
 
 --
 -- Índices de tabela `doador`
@@ -266,6 +333,18 @@ ALTER TABLE `tb_pedidoitenspatrimonio`
 --
 
 --
+-- AUTO_INCREMENT de tabela `doacao`
+--
+ALTER TABLE `doacao`
+  MODIFY `id_doacao` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `doacao_item`
+--
+ALTER TABLE `doacao_item`
+  MODIFY `id_doacao_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de tabela `doador`
 --
 ALTER TABLE `doador`
@@ -287,7 +366,7 @@ ALTER TABLE `patrimonio`
 -- AUTO_INCREMENT de tabela `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `ped_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ped_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `pedidopatrimonio`
@@ -299,7 +378,7 @@ ALTER TABLE `pedidopatrimonio`
 -- AUTO_INCREMENT de tabela `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `id_produto` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_produto` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `projetos`
@@ -311,7 +390,7 @@ ALTER TABLE `projetos`
 -- AUTO_INCREMENT de tabela `tb_pedidoitens`
 --
 ALTER TABLE `tb_pedidoitens`
-  MODIFY `pit_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `pit_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `tb_pedidoitenspatrimonio`
@@ -322,6 +401,19 @@ ALTER TABLE `tb_pedidoitenspatrimonio`
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `doacao`
+--
+ALTER TABLE `doacao`
+  ADD CONSTRAINT `doacao_ibfk_1` FOREIGN KEY (`doador_id`) REFERENCES `doador` (`id_doador`);
+
+--
+-- Restrições para tabelas `doacao_item`
+--
+ALTER TABLE `doacao_item`
+  ADD CONSTRAINT `doacao_item_ibfk_1` FOREIGN KEY (`doacao_id`) REFERENCES `doacao` (`id_doacao`),
+  ADD CONSTRAINT `doacao_item_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produto` (`id_produto`);
 
 --
 -- Restrições para tabelas `evento`

@@ -33,17 +33,21 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             type="password" name="password" id="password"  placeholder="Password">
                     </div>
+                    
                     <div class="text-center">
                         <button type="submit"
                             class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Entrar</button>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <a href="login/cadastrar" class="text-indigo-600 hover:text-indigo-900">Crie uma conta!</a>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <a href="login/recuperar-senha" class="text-indigo-600 hover:text-indigo-900">Esqueceu sua senha?</a>
                     </div>
                 </form>
                 <% if (typeof msg != "undefined") { %>
                     <span style="color:red"><%= msg %></span>
                 <% } %>
-                <div class="mt-6 text-center">
-                    <a href="login/cadastrar" class="text-indigo-600 hover:text-indigo-900">Crie uma conta!</a>
-                </div>
             </article>
         </section>
     </body>

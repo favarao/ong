@@ -1,0 +1,136 @@
+<script src="/js/doacoes/cadastrar.js"></script>
+
+<div class="container">
+    <h1>Agendamento de Doações</h1>
+    
+    <div id="alertaMensagem" style="display: none;" class="alert" role="alert">
+        <!-- Mensagens de alerta aparecerão aqui -->
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Dados do Doador</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <input type="text" id="termoBuscaDoador" class="form-control" placeholder="Digite o nome ou ID do doador">
+                        <button class="btn btn-primary" id="btnBuscarDoador">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="resultadosBusca" style="display: none;" class="mb-3">
+                <select id="seletorDoador" class="form-select">
+                    <option selected disabled>Selecione um doador</option>
+                </select>
+                <button class="btn btn-success mt-2" id="btnConfirmarDoador">Confirmar Doador</button>
+            </div>
+            
+            <div id="dadosDoador" style="display: none;">
+                <input type="hidden" id="doadorId">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Nome:</label>
+                            <p id="doadorNome" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <p id="doadorEmail" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label">Telefone:</label>
+                            <p id="doadorTelefone" class="form-control-static"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Dados da Doação</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="dataDoacao" class="form-label">Data da Doação:</label>
+                        <input type="date" class="form-control" id="dataDoacao" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="valorDoacao" class="form-label">Valor em Dinheiro (R$):</label>
+                        <input type="number" class="form-control" id="valorDoacao" min="0" step="0.01" value="0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" id="doarProdutos">
+                <label class="form-check-label" for="doarProdutos">
+                    Incluir doação de produtos
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <div id="secaoProdutos" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Produtos Doados</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="seletorProduto" class="form-label">Produto:</label>
+                            <select class="form-select" id="seletorProduto">
+                                <option selected disabled>Selecione um produto</option>
+                                <!-- Produtos serão carregados via JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="qtdProduto" class="form-label">Quantidade:</label>
+                            <input type="number" class="form-control" id="qtdProduto" min="1" value="1">
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-success" id="btnAdicionarProduto">Adicionar</button>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <table class="table table-striped" id="tabelaProdutos">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Produtos adicionados aparecerão aqui -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+        <a href="/doacoes" class="btn btn-secondary">Voltar</a>
+        <button id="btnSalvar" class="btn btn-primary">Agendar Doação</button>
+    </div>
+</div>

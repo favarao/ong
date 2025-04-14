@@ -198,6 +198,38 @@ class DoadorModel {
 
         return result;
     }
+
+    async obterPorEmailSenha(email, senha) {
+        let sql = "select * from doador where email = ? and senha = ?";
+
+        let valores = [email, senha];
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        if(rows.length > 0) {
+            let row = rows[0];
+            return new DoadorModel(row["id_doador"], row["nome"], row["CPF"], row["RG"],
+                row["sexo"], row["email"], row["senha"], row["telefone"], row["endereco"], row["CEP"], row["admin"]);
+        }
+
+        return null;
+    }
+    
+    async obterPorEmail(email) {
+        let sql = "select * from doador where email = ?";
+
+        let valores = [email];
+
+        let rows = await banco.ExecutaComando(sql, valores);
+
+        if(rows.length > 0) {
+            let row = rows[0];
+            return new DoadorModel(row["id_doador"], row["nome"], row["CPF"], row["RG"],
+                row["sexo"], row["email"], row["senha"], row["telefone"], row["endereco"], row["CEP"], row["admin"]);
+        }
+
+        return null;
+    }
 }
 
 module.exports = DoadorModel;
