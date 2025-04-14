@@ -1,0 +1,113 @@
+<script src="/js/pagamentos.js"></script>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="payment-container w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg flex">
+        <!-- Opções de Pagamento -->
+        <div class="payment-selection border-r-2 w-1/3 p-4">
+            <h2 class="text-sm font-bold mb-4">Escolha a forma de pagamento</h2>
+            <div class="mb-2">
+                <label class="flex items-center space-x-1 bg-zinc-200 p-3 rounded-lg">
+                    <input type="radio" name="payment-method" value="pix" checked class="form-radio text-indigo-600" />
+                    <span class="text-gray-700">Pagamento via Pix</span>
+                </label>
+            </div>
+            <div class="mb-2">
+                <label class="flex items-center space-x-1 bg-zinc-200 p-3 rounded-lg">
+                    <input type="radio" name="payment-method" value="card" class="form-radio text-indigo-600" />
+                    <span class="text-gray-700">Pagamento com Cartão</span>
+                </label>
+            </div>
+            <div class="mb-2">
+                <label class="flex items-center space-x-1 bg-zinc-200 p-3 rounded-lg">
+                    <input type="radio" name="payment-method" value="outros" class="form-radio text-indigo-600" />
+                    <span class="text-gray-700">Outros</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Conteúdo de Pagamento -->
+        <div class="payment-content w-2/3 p-4">
+            <!-- Pagamento via Pix -->
+            <div class="payment-option" id="pix-option">
+                <h2 class="text-xl font-bold mb-4">Pagamento via Pix</h2>
+                <label for="valor-pix" class="block text-sm font-medium text-gray-700">Valor do Pagamento (em
+                    BRL):</label>
+                <input type="text" id="valor-pix" name="valor-pix" required placeholder="R$ 30,00" disabled
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                <button id="QRcode"
+                    class="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Gerar
+                    QR Code</button>
+                <div id="qrcode-container" class="mt-4"></div>
+                <div id="comprovante" style="display: none;" >
+                    <label for="file">
+                        Upload do Comprovante de Pagamento:
+                    </label>
+                    <input
+                        class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none "
+                        aria-describedby="file_input_help" id="file" type="file">
+                </div>
+                <div class="button-center mt-4">
+                    <button id="enviar-comprovante" style="display: none"
+                        class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Enviar
+                        Comprovante</button>
+                </div>
+            </div>
+
+            <!-- Pagamento com Cartão -->
+            <div class="payment-option" id="card-option" style="display: none;">
+                <h2 class="text-xl font-bold mb-4">Pagamento com Cartão de Crédito/Débito</h2>
+                <label for="numero-cartao" class="block text-sm font-medium text-gray-700">Número do Cartão:</label>
+                <input type="text" id="numero-cartao" name="numero-cartao" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                <label for="nome-titular" class="block text-sm font-medium text-gray-700 mt-4">Nome do Titular:</label>
+                <input type="text" id="nome-titular" name="nome-titular" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                <div class="flex space-x-4 mt-4">
+                    <div class="w-1/2">
+                        <label for="data-expiracao" class="block text-sm font-medium text-gray-700">Data de
+                            Expiração:</label>
+                        <input type="text" id="data-expiracao" name="data-expiracao" placeholder="MM/AA" required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                    <div class="w-1/2">
+                        <label for="codigo-seguranca" class="block text-sm font-medium text-gray-700">CVV:</label>
+                        <input type="text" id="codigo-seguranca" name="codigo-seguranca" required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                    </div>
+                </div>
+                <div class="button-center mt-6">
+                    <button id="confirmar-pagamento" onclick="HomePage()"
+                        class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Confirmar
+                        Pagamento</button>
+                </div>
+            </div>
+
+            <!-- Outras Doações -->
+            <div class="payment-option" id="outros-option" style="display: none;">
+                <h2 class="text-xl font-bold mb-4">Outras Doações</h2>
+                <label for="tipo-doacao" class="block text-sm font-medium text-gray-700">Tipo de Doação:</label>
+                <select id="tipo-doacao" name="tipo-doacao"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="brinquedo">Brinquedo</option>
+                    <option value="roupas">Roupas</option>
+                    <option value="higiene">Produtos de Higiene</option>
+                </select>
+                <label for="foto-doacao" class="block text-sm font-medium text-gray-700 mt-4">Enviar Foto:</label>
+                <input type="file" id="foto-doacao" name="foto-doacao" required
+                    class="mt-1 block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none" />
+                <p class="mt-4 text-sm text-gray-700">Por favor, envie sua doação para o seguinte endereço:</p>
+                <address class="mt-2 not-italic text-gray-700">
+                    R. José Bongiovani, 700<br>
+                    Cidade Universitária, Pres. Prudente - SP<br>
+                    CEP: 19050-920
+                </address>
+                <div class="button-center mt-6">
+                    <button id="enviar-doacao" onclick="HomePage()"
+                        class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

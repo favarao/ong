@@ -1,0 +1,6 @@
+
+@media print {
+    #divFiltros, #btnExportarExcel, #btnExportarPdf, #HiddenNovoProduto, #HiddenCarrinhoProduto, #sidebar {
+        display: none !important;
+    }
+}

@@ -1,0 +1,55 @@
+<script src="/js/projetos/cadastrar.js"></script>
+
+<div class="container">
+    <h1>Cadastro de Projetos</h1>
+    <div>
+        <% if (typeof msg !="undefined" ) { %>
+            <span>
+                <%= msg %>
+            </span>
+        <% } %>
+    </div>
+    <div>
+        <input type="hidden" class="form-control" id="projetoStatu" name="projetoStatu" value="1">
+        <div>
+            <div class="form-group">
+                <label for="projetoNome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="projetoNome" name="projetoNome">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="projetoDescricao" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="projetoDescricao" name="projetoDescricao">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="projetoDataInic" class="form-label">Data Início</label>
+                <input type="date" class="form-control" id="projetoDataInic" name="projetoDataInic">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="projetoDataFim" class="form-label">Data Fim</label>
+                <input type="date" class="form-control" id="projetoDataFim" name="projetoDataFim">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="projetoObjetivo" class="form-label">Objetivo</label>
+                <input type="text" class="form-control" id="projetoObjetivo" name="projetoObjetivo">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="projetoOrcamento" class="form-label">Orçamento</label>
+                <input type="number" class="form-control" id="projetoOrcamento" name="projetoOrcamento">
+            </div>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-primary" id="btnCadastrar" type="button">Cadastrar</button>
+        <a class="btn btn-secondary" href="/projetos">Voltar</a>
+    </div>
+</div>

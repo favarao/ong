@@ -1,0 +1,64 @@
+<script src="/js/projetos/alterar.js"></script>
+
+<div class="container">
+    <h1>Alteração de Projetos</h1>
+    <div>
+        <% if (typeof msg !="undefined" ) { %>
+            <span>
+                <%= msg %>
+            </span>
+        <% } %>
+    </div>
+    <div>
+        <div>
+            <input id="projetoId" hidden value="<%= projeto.projetoId %>">
+            <input type="hidden" class="form-control" id="projetoStatu" name="projetoStatu" value="<%= projeto.projetoStatu %>">
+            <div>
+                <div class="form-group">
+                    <label for="projetoNome" class="form-label">Nome</label>
+                    <input value="<%= projeto.projetoNome %>" type="text" class="form-control" id="projetoNome" name="projetoNome">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoDescricao" class="form-label">Descrição</label>
+                    <input value="<%= projeto.projetoDescricao %>" type="text" class="form-control" id="projetoDescricao" name="projetoDescricao">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoDataInic" class="form-label">Data Início</label>
+                    <input value="<%= projeto.projetoDataInic %>" type="date" class="form-control" id="projetoDataInic" name="projetoDataInic">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoDataFim" class="form-label">Data Fim</label>
+                    <input value="<%= projeto.projetoDataFim %>" type="date" class="form-control" id="projetoDataFim" name="projetoDataFim">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoObjetivo" class="form-label">Objetivo</label>
+                    <input value="<%= projeto.projetoObjetivo %>" type="text" class="form-control" id="projetoObjetivo" name="projetoObjetivo">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoOrcamento" class="form-label">Orçamento</label>
+                    <input value="<%= projeto.projetoOrcamento %>" type="number" class="form-control" id="projetoOrcamento" name="projetoOrcamento">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="projetoStatu" class="form-label">Status</label>
+                    <input value="<%= projeto.projetoStatu %>" type="hidden" class="form-control" id="projetoStatu" name="projetoStatu">
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" id="btnAlterar" type="button">Alterar</button>
+            <a class="btn btn-secondary" href="/projetos">Voltar</a>
+        </div>
+    </div>
+</div>

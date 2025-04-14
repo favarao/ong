@@ -1,0 +1,45 @@
+<script src="/js/produtos/alterar.js"></script>
+
+<div class="container">
+    <h1>Alteração de Produtos</h1>
+    <div>
+        <% if (typeof msg !="undefined" ) { %>
+            <span>
+                <%= msg %>
+            </span>
+        <% } %>
+    </div>
+    <div>
+        <div>
+            <input id="produtoId" hidden value="<%= produto.produtoId %>">
+            <div>
+                <div class="form-group">
+                    <label for="produtoNome" class="form-label">Nome</label>
+                    <input value="<%= produto.produtoNome %>" type="text" class="form-control" id="produtoNome" name="produtoNome">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="produtoDesc" class="form-label">Descrição</label>
+                    <input value="<%= produto.produtoDesc %>" type="text" class="form-control" id="produtoDesc" name="produtoDesc">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="produtoPreco" class="form-label">Preço</label>
+                    <input value="<%= produto.produtoPreco %>" type="text" class="form-control" id="produtoPreco" name="produtoPreco">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="produtoQuant" class="form-label">Quantidade</label>
+                    <input value="<%= produto.produtoQuant %>" type="text" class="form-control" id="produtoQuant" name="produtoQuant">
+                </div>
+            </div>
+        <div>
+            <button class="btn btn-primary" id="btnAlterar" type="button">Alterar</button>
+            <a class="btn btn-secondary" href="/produtos">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>

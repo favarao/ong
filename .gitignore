@@ -1,0 +1,26 @@
+
+# Ignora a pasta node_modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de build
+dist/
+build/
+
+# Ambiente
+.env
+
+# IDEs/editores
+.vscode/
+.idea/
+
+# Cache
+.cache/

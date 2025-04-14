@@ -1,0 +1,48 @@
+<script src="/js/patrimonios/cadastrar.js"></script>
+
+<div class="container">
+    <h1>Cadastro de patrimonios</h1>
+    <div>
+        <% if (typeof msg !="undefined" ) { %>
+            <span>
+                <%= msg %>
+            </span>
+            <% } %>
+    </div>
+    <div>
+        <div>
+            <div class="form-group">
+                <label for="patrimonioNome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="patrimonioNome" name="patrimonioNome">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="patrimonioDesc" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="patrimonioDesc" name="patrimonioDesc">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="patrimonioQuantidade" class="form-label">Quantidade</label>
+                <input type="text" class="form-control" id="patrimonioQuantidade" name="patrimonioQuantidade">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="patrimonioProjeto" class="form-label">Projeto Id </label>
+                <select class="form-control" id="patrimonioProjeto" name="patrimonioProjeto">
+                    <option selected value="0">Selecione...</option>
+                    <% for(let i = 0; i<lista.length; i++) { %>
+                        <option value="<%= lista[i].projetoId %>"><%= lista[i].projetoId %> - <%= lista[i].projetoNome %></option>
+                    <% } %>
+                </select>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" id="btnCadastrar" type="button">Cadastrar</button>
+            <a class="btn btn-secondary" href="/patrimonios">Voltar</a>
+        </div>
+    </div>
+</div>
+</div>

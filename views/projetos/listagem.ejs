@@ -1,0 +1,38 @@
+<script src="/js/projetos/listagem.js"></script>
+<h1 class="text-secondary">Projetos cadastrados</h1>
+
+<a class="btn btn-primary" style="max-width: 200px;" href="projetos/cadastrar">Novo Projeto</a>
+<hr>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Data Início</th>
+                <th scope="col">Data Fim</th>
+                <th scope="col">Objetivo</th>
+                <th scope="col">Orçamento</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < lista.length; i++)  { %>
+                <tr>
+                    <td><%= lista[i].projetoId %></td>
+                    <td><%= lista[i].projetoNome %></td>
+                    <td><%= lista[i].projetoDescricao %></td>
+                    <td><%= new Date(lista[i].projetoDataInic).toISOString().split('T')[0].split('-').reverse().join('/') %></td>
+                    <td><%= new Date(lista[i].projetoDataFim).toISOString().split('T')[0].split('-').reverse().join('/') %></td>
+                    <td><%= lista[i].projetoObjetivo %></td>
+                    <td><%= lista[i].projetoOrcamento %></td>
+                    <td>
+                        <a href="/projetos/alterar/<%= lista[i].projetoId %>" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                        <button data-codigoexclusao="<%= lista[i].projetoId %>" class="btn btn-danger btnExclusao"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/js/usuarios/cadastrar.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Unidos por sonhos</title>
+</head>
+    <body class="bg-gray-100 flex items-center justify-center h-screen">
+        <div class="box w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg">
+            <div class="form-box">
+                <h2 class="text-2xl font-bold mb-6">Criar Conta</h2>
+                <form>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="inputNome" class="block text-sm font-medium text-gray-700">Nome completo</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputNome" placeholder="Ex: João Silva" />
+                        </div>
+                        <div>
+                            <label for="inputCPF" class="block text-sm font-medium text-gray-700">CPF</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputCPF" placeholder="Ex: 123.456.789-00" />
+                        </div>
+                        <div>
+                            <label for="inputRG" class="block text-sm font-medium text-gray-700">RG</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputRG" placeholder="Ex: 45.456.789-3" />
+                        </div>
+                        <div>
+                            <label for="inputSexo" class="block text-sm font-medium text-gray-700">SEXO</label>
+                            <select id="inputSexo" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="inputEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputEmail" placeholder="Ex: joao.silva@email.com" />
+                        </div>
+                        <div>
+                            <label for="inputSenha" class="block text-sm font-medium text-gray-700">Senha</label>
+                            <input type="password"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputSenha" placeholder="Insira uma senha segura" />
+                        </div>
+                        <div>
+                            <label for="inputTelefone" class="block text-sm font-medium text-gray-700">Telefone</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputTelefone" placeholder="Ex: (11) 98765-4321" />
+                        </div>
+                        <div>
+                            <label for="inputEndereco" class="block text-sm font-medium text-gray-700">Endereço</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputEndereco" placeholder="Ex: Rua das Flores, 123" />
+                        </div>
+                        <div>
+                            <label for="inputCEP" class="block text-sm font-medium text-gray-700">CEP</label>
+                            <input type="text"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                id="inputCEP" placeholder="19060-390" />
+                        </div>  
+
+                        <div class="col-span-2 flex items-center justify-center">
+                            <button class="w-40 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" id="btnCadastrar" type="button">Cadastrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
