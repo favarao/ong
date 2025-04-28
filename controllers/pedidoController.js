@@ -24,6 +24,7 @@
                 if(listaValidacao.length == 0) {
                     //prosseguir com a gravação
                     let pedido = new PedidoModel();
+                    pedido.doadorId = req.doadorId;
                     let pedidoId = await pedido.gravar();
                     let produto = new ProdutoModel()
                     //gerar os itens do pedido
