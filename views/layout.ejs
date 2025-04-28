@@ -77,6 +77,10 @@
       </ul>
       
       <div class="sidebar-footer d-flex flex-column justify-content-center mb-3">
+        <div class="user-info text-center mb-3">
+          <p><strong>Usuário:</strong> <%= nome %></p>
+          <p><strong>Nível:</strong> <%= isAdmin === 1 ? 'Administrador' : 'Doador' %></p>
+        </div>
         <a href="/login/trocar-senha" class="btn btn-dark mb-2">Trocar Senha</a>
         <a href="/login/logout" class="btn btn-dark">Logout</a>
       </div>

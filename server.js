@@ -45,6 +45,7 @@ app.use(auth.verificarUsuarioLogado);
 // Disponibiliza o usuário para todas as views
 app.use((req, res, next) => {
     res.locals.isAdmin = req.admin || null;
+    res.locals.nome = req.nome || null;
     next();
 });
 

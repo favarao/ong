@@ -9,6 +9,7 @@ class AuthMiddleware {
             
             if(doador != null) {
                 req.admin = doador.doadorAdmin;
+                req.nome = doador.doadorNome;
                 next();
             }
             else{
