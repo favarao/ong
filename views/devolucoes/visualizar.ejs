@@ -1,0 +1,107 @@
+<div class="container">
+    <h1 class="mb-4">Detalhes da Devolução</h1>
+    
+    <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="alert alert-danger">
+            <%= erro %>
+        </div>
+        <a href="/devolucoes" class="btn btn-secondary">Voltar para Listagem</a>
+    <% } else { %>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados da Devolução</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ID da Devolução:</strong>
+                        <p><%= devolucao.devolucaoId %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Data:</strong>
+                        <p><%= new Date(devolucao.devolucaoData).toLocaleDateString('pt-BR') %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Valor Total:</strong>
+                        <p>R$ <%= parseFloat(devolucao.devolucaoValor).toFixed(2) %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Tipo de Retorno:</strong>
+                        <p><%= devolucao.tipoRetorno === 'produto' ? 'Produto' : 'Dinheiro' %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados do Cliente</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Nome:</strong>
+                        <p><%= devolucao.clienteNome %></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>ID do Cliente:</strong>
+                        <p><%= devolucao.clienteId %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados do Pedido</h4>
+            </div>
+            <div class="card-body">
+                <strong>Número do Pedido:</strong>
+                <p><%= devolucao.pedidoId %></p>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Produtos Devolvidos</h4>
+            </div>
+            <div class="card-body">
+                <% if (itens && itens.length > 0) { %>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID do Produto</th>
+                                <th>Nome do Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor Unitário</th>
+                                <th>Valor Total</th>
+                                <th>Com Defeito</th>
+                                <th>Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < itens.length; i++) { %>
+                                <tr>
+                                    <td><%= itens[i].produtoId %></td>
+                                    <td><%= itens[i].produtoNome %></td>
+                                    <td><%= itens[i].quantidade %></td>
+                                    <td>R$ <%= parseFloat(itens[i].valorUnitario).toFixed(2) %></td>
+                                    <td>R$ <%= (parseFloat(itens[i].valorUnitario) * parseFloat(itens[i].quantidade)).toFixed(2) %></td>
+                                    <td><%= itens[i].defeito ? 'Sim' : 'Não' %></td>
+                                    <td><%= itens[i].observacao || '-' %></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p>Nenhum produto foi incluído nesta devolução.</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <a href="/devolucoes" class="btn btn-secondary">Voltar para Listagem</a>
+            <a href="/devolucoes/cadastrar" class="btn btn-primary">Registrar Nova Devolução</a>
+        </div>
+    <% } %>
+</div>

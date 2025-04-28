@@ -1,0 +1,89 @@
+<div class="container">
+    <h1 class="mb-4">Detalhes da Saída para Evento</h1>
+    
+    <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="alert alert-danger">
+            <%= erro %>
+        </div>
+        <a href="/saidas-evento" class="btn btn-secondary">Voltar para Listagem</a>
+    <% } else { %>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados da Saída</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ID da Saída:</strong>
+                        <p><%= saida.saidaId %></p>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Data:</strong>
+                        <p><%= new Date(saida.data).toLocaleDateString('pt-BR') %></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Observação:</strong>
+                        <p><%= saida.observacao || "-" %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Dados do Evento</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Nome do Evento:</strong>
+                        <p><%= saida.eventoNome %></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>ID do Evento:</strong>
+                        <p><%= saida.eventoId %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Itens Retirados</h4>
+            </div>
+            <div class="card-body">
+                <% if (itens && itens.length > 0) { %>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID do Item</th>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < itens.length; i++) { %>
+                                <tr>
+                                    <td><%= itens[i].itemId %></td>
+                                    <td><%= itens[i].itemNome %></td>
+                                    <td><%= itens[i].tipo === 'produto' ? 'Produto' : 'Patrimônio' %></td>
+                                    <td><%= itens[i].quantidade %></td>
+                                    <td><%= itens[i].observacao || "-" %></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <p>Nenhum item foi incluído nesta saída para evento.</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <a href="/saidas-evento" class="btn btn-secondary">Voltar para Listagem</a>
+            <a href="/saidas-evento/cadastrar" class="btn btn-primary">Registrar Nova Saída</a>
+        </div>
+    <% } %>
+</div>

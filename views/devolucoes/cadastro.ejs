@@ -1,0 +1,122 @@
+<script src="/js/devolucoes/cadastrar.js"></script>
+
+<div class="container">
+    <h1>Registro de Devolução</h1>
+    
+    <div id="alertaMensagem" style="display: none;" class="alert" role="alert">
+        <!-- Mensagens de alerta aparecerão aqui -->
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Dados do Cliente</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <input type="text" id="termoBuscaCliente" class="form-control" placeholder="Digite o nome ou ID do cliente">
+                        <button class="btn btn-primary" id="btnBuscarCliente">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="resultadosBusca" style="display: none;" class="mb-3">
+                <select id="seletorCliente" class="form-select">
+                    <option selected disabled>Selecione um cliente</option>
+                </select>
+                <button class="btn btn-success mt-2" id="btnConfirmarCliente">Confirmar Cliente</button>
+            </div>
+            
+            <div id="dadosCliente" style="display: none;">
+                <input type="hidden" id="clienteId">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Nome:</label>
+                            <p id="clienteNome" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Email:</label>
+                            <p id="clienteEmail" class="form-control-static"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="secaoPedidos" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Pedidos do Cliente</h4>
+            </div>
+            <div class="card-body">
+                <div id="listaPedidos">
+                    <p>Carregando pedidos...</p>
+                </div>
+                <input type="hidden" id="pedidoId">
+                <button class="btn btn-info mt-2" id="btnVisualizarProdutos" style="display: none;">Visualizar Produtos</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="secaoProdutos" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Produtos do Pedido</h4>
+            </div>
+            <div class="card-body">
+                <div id="listaProdutos">
+                    <p>Carregando produtos...</p>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Produtos para Devolução</h5>
+                    <table class="table table-striped" id="tabelaDevolucao">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor (R$)</th>
+                                <th>Com Defeito?</th>
+                                <th>Observação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Produtos adicionados aparecerão aqui -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="msgTabelaVazia" class="text-center">
+                        Nenhum produto adicionado para devolução.
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoRetorno" id="retornoProduto" value="produto" checked>
+                        <label class="form-check-label" for="retornoProduto">
+                            Devolução em Produto (Retornar ao estoque)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoRetorno" id="retornoDinheiro" value="dinheiro">
+                        <label class="form-check-label" for="retornoDinheiro">
+                            Devolução em Dinheiro (Restituir valor ao cliente)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+        <a href="/devolucoes" class="btn btn-secondary">Voltar</a>
+        <button id="btnSalvar" class="btn btn-primary" style="display: none;">Registrar Devolução</button>
+    </div>
+</div>

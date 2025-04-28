@@ -1,0 +1,42 @@
+<script src="/js/devolucoes/listagem.js"></script>
+
+<h1 class="text-secondary">Devoluções Registradas</h1>
+
+<a class="btn btn-primary" style="max-width: 200px;" href="/devolucoes/cadastrar">Nova Devolução</a>
+
+<hr>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Venda</th>
+                <th scope="col">Data</th>
+                <th scope="col">Valor (R$)</th>
+                <th scope="col">Tipo de Retorno</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].devolucaoId %></td>
+                    <td><%= lista[i].clienteNome %></td>
+                    <td><%= lista[i].vendaNumero %></td>
+                    <td><%= new Date(lista[i].devolucaoData).toLocaleDateString('pt-BR') %></td>
+                    <td><%= parseFloat(lista[i].devolucaoValor).toFixed(2) %></td>
+                    <td><%= lista[i].tipoRetorno === 'produto' ? 'Produto' : 'Dinheiro' %></td>
+                    <td>
+                        <a href="/devolucoes/visualizar/<%= lista[i].devolucaoId %>" class="btn btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button data-codigoexclusao="<%= lista[i].devolucaoId %>" class="btn btn-danger btnExclusao">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

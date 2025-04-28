@@ -1,0 +1,90 @@
+<script src="/js/saidas-evento/cadastrar.js"></script>
+
+<div class="container">
+    <h1>Registrar Saída para Evento</h1>
+    
+    <div id="alertaMensagem" style="display: none;" class="alert" role="alert">
+        <!-- Mensagens de alerta aparecerão aqui -->
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Dados do Evento</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="eventoSelect" class="form-label">Selecione o Evento:</label>
+                <select class="form-select" id="eventoSelect">
+                    <option value="" selected disabled>Selecione...</option>
+                    <% for (let i = 0; i < listaEventos.length; i++) { %>
+                        <option value="<%= listaEventos[i].eventoId %>"><%= listaEventos[i].eventoNome %></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class="form-group mt-3">
+                <label for="observacao" class="form-label">Observação:</label>
+                <textarea class="form-control" id="observacao" rows="3" placeholder="Informações adicionais sobre esta saída para evento"></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <div id="secaoItens" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Produtos e Patrimônios</h4>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="itemsTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button" role="tab" aria-controls="produtos" aria-selected="true">Produtos</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="patrimonios-tab" data-bs-toggle="tab" data-bs-target="#patrimonios" type="button" role="tab" aria-controls="patrimonios" aria-selected="false">Patrimônios</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-3" id="itemsTabContent">
+                    <div class="tab-pane fade show active" id="produtos" role="tabpanel" aria-labelledby="produtos-tab">
+                        <div id="listaProdutos">
+                            <p>Carregando produtos...</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="patrimonios" role="tabpanel" aria-labelledby="patrimonios-tab">
+                        <div id="listaPatrimonios">
+                            <p>Carregando patrimônios...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Itens adicionados para saída</h5>
+                    <table class="table table-striped" id="tabelaSaida">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Quantidade</th>
+                                <th>Observação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Itens adicionados aparecerão aqui -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="msgTabelaVazia" class="text-center">
+                        Nenhum item adicionado para saída.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+        <a href="/saidas-evento" class="btn btn-secondary">Voltar</a>
+        <button id="btnSalvar" class="btn btn-primary" style="display: none;">Registrar Saída</button>
+    </div>
+</div>

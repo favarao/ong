@@ -1,0 +1,38 @@
+<script src="/js/saidas-evento/listagem.js"></script>
+
+<h1 class="text-secondary">Saídas para Eventos</h1>
+
+<a class="btn btn-primary" style="max-width: 200px;" href="/saidas-evento/cadastrar">Nova Saída para Evento</a>
+
+<hr>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Evento</th>
+                <th scope="col">Data</th>
+                <th scope="col">Observação</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < lista.length; i++) { %>
+                <tr>
+                    <td><%= lista[i].saidaId %></td>
+                    <td><%= lista[i].eventoNome %></td>
+                    <td><%= new Date(lista[i].data).toLocaleDateString('pt-BR') %></td>
+                    <td><%= lista[i].observacao || "-" %></td>
+                    <td>
+                        <a href="/saidas-evento/visualizar/<%= lista[i].saidaId %>" class="btn btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button data-codigoexclusao="<%= lista[i].saidaId %>" class="btn btn-danger btnExclusao">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
