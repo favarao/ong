@@ -14,6 +14,8 @@ const AuthMiddleware = require('./middlewares/authMiddleware');
 const cookieParser = require('cookie-parser');
 const projetoRoute = require('./routes/projetoRoute');
 const doacaoRoute = require('./routes/doacaoRoute');
+const devolucaoRoute = require('./routes/devolucaoRoute');
+const saidaEventoRoute = require('./routes/saidaEventoRoute');
 // Cria uma instância do aplicativo Express
 const app = express();
 
@@ -46,6 +48,7 @@ app.use(auth.verificarUsuarioLogado);
 app.use((req, res, next) => {
     res.locals.isAdmin = req.admin || null;
     res.locals.nome = req.nome || null;
+    res.locals.doadorId = req.doadorId || null;
     next();
 });
 
@@ -57,6 +60,8 @@ app.use("/pedidosPatrimonio", pedidoPatrimonioRoute);
 app.use('/patrimonios', patrimonioRoute);
 app.use('/projetos', projetoRoute);
 app.use('/doacoes', doacaoRoute);
+app.use('/devolucoes', devolucaoRoute);
+app.use('/saidasEventos', saidaEventoRoute);
 
 
 // Apenas a rota de eventos requer perfil admin

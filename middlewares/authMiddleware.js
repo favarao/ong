@@ -8,6 +8,7 @@ class AuthMiddleware {
             doador = await doador.obter(doadorId);
             
             if(doador != null) {
+                req.doadorId = doador.doadorId;
                 req.admin = doador.doadorAdmin;
                 req.nome = doador.doadorNome;
                 next();

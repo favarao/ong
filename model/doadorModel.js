@@ -173,6 +173,22 @@ class DoadorModel {
         return null;
     }
 
+    toJSON() {
+        return {
+            doadorId: this.#doadorId,
+            doadorNome: this.#doadorNome,
+            doadorCPF: this.#doadorCPF,
+            doadorRG: this.#doadorRG,
+            doadorSexo: this.#doadorSexo,
+            doadorEmail: this.#doadorEmail,
+            doadorSenha: this.#doadorSenha,
+            doadorTelefone: this.#doadorTelefone,
+            doadorEndereco: this.#doadorEndereco,
+            doadorCEP: this.#doadorCEP,
+            doadorAdmin: this.#doadorAdmin
+        };
+    }
+
     async obterPorEmailSenha(email, senha) {
         let sql = "select * from doador where email = ? and senha = ?";
 
