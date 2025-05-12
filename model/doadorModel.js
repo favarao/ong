@@ -1,3 +1,4 @@
+
 const Database = require("../utils/database");
 
 const banco = new Database();
@@ -215,22 +216,6 @@ class DoadorModel {
         return result;
     }
 
-    async obterPorEmailSenha(email, senha) {
-        let sql = "select * from doador where email = ? and senha = ?";
-
-        let valores = [email, senha];
-
-        let rows = await banco.ExecutaComando(sql, valores);
-
-        if(rows.length > 0) {
-            let row = rows[0];
-            return new DoadorModel(row["id_doador"], row["nome"], row["CPF"], row["RG"],
-                row["sexo"], row["email"], row["senha"], row["telefone"], row["endereco"], row["CEP"], row["admin"]);
-        }
-
-        return null;
-    }
-    
     async obterPorEmail(email) {
         let sql = "select * from doador where email = ?";
 
@@ -245,6 +230,33 @@ class DoadorModel {
         }
 
         return null;
+    }
+
+    // Função para buscar doadores por nome
+    async buscarPorNome(nome) {
+        let sql = "select * from doador where nome LIKE ?";
+        let valores = [`%${nome}%`];
+        
+        let rows = await banco.ExecutaComando(sql, valores);
+        let lista = [];
+
+        for(let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            lista.push({
+                id_doador: row["id_doador"],
+                nome: row["nome"],
+                email: row["email"],
+                telefone: row["telefone"],
+                CPF: row["CPF"],
+                RG: row["RG"],
+                sexo: row["sexo"],
+                endereco: row["endereco"],
+                CEP: row["CEP"],
+                admin: row["admin"]
+            });
+        }
+        
+        return lista;
     }
 }
 

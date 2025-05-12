@@ -15,6 +15,7 @@ const cookieParser = require('cookie-parser');
 const projetoRoute = require('./routes/projetoRoute');
 const doacaoRoute = require('./routes/doacaoRoute');
 const devolucaoRoute = require('./routes/devolucaoRoute');
+const relatorioRoute = require('./routes/relatorioRoute');
 const saidaEventoRoute = require('./routes/saidaEventoRoute');
 // Cria uma instância do aplicativo Express
 const app = express();
@@ -61,6 +62,8 @@ app.use('/patrimonios', patrimonioRoute);
 app.use('/projetos', projetoRoute);
 app.use('/doacoes', doacaoRoute);
 app.use('/devolucoes', devolucaoRoute);
+app.use('/relatorios', relatorioRoute);
+
 app.use('/saidasEventos', saidaEventoRoute);
 
 

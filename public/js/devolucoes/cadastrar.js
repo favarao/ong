@@ -19,19 +19,203 @@ document.addEventListener("DOMContentLoaded", function() {
     const msgTabelaVazia = document.getElementById("msgTabelaVazia");
     const btnSalvar = document.getElementById("btnSalvar");
     const alertaMensagem = document.getElementById("alertaMensagem");
+    const sugestoesList = document.getElementById("sugestoesList");
     
     // Lista de produtos para devolução
     let produtosDevolucao = [];
     // Lista de produtos do pedido
     let produtosPedido = [];
+    // Lista de clientes para autocomplete
+    let clientesTodas = [];
+    
+    // Variáveis de controle do autocomplete
+    let timeoutId = null;
+    let clienteSelecionado = null;
     
     // Event Listeners
+    termoBuscaCliente.addEventListener("input", buscarClienteAutoComplete);
+    termoBuscaCliente.addEventListener("keydown", handleKeyDown);
+    termoBuscaCliente.addEventListener("click", function() {
+        if (termoBuscaCliente.value.trim().length >= 2) {
+            buscarClienteAutoComplete();
+        }
+    });
     btnBuscarCliente.addEventListener("click", buscarCliente);
     btnConfirmarCliente.addEventListener("click", confirmarCliente);
     btnVisualizarProdutos.addEventListener("click", visualizarProdutos);
     btnSalvar.addEventListener("click", salvarDevolucao);
     
-    // Funções
+    // Fechar sugestões ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (!termoBuscaCliente.contains(e.target) && !sugestoesList.contains(e.target)) {
+            sugestoesList.style.display = 'none';
+        }
+    });
+    
+    // Funções do autocomplete
+    function buscarClienteAutoComplete() {
+        const termo = termoBuscaCliente.value.trim();
+        
+        if (termo.length < 2) {
+            sugestoesList.style.display = 'none';
+            return;
+        }
+        
+        // Limpar timeout anterior
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        
+        // Aguardar 300ms antes de fazer a busca
+        timeoutId = setTimeout(() => {
+            if (!isNaN(termo) && parseInt(termo) > 0) {
+                // Se for número, buscar por ID
+                buscarPorId(parseInt(termo));
+            } else {
+                // Se for texto, buscar por nome
+                buscarPorNome(termo);
+            }
+        }, 300);
+    }
+    
+    function buscarPorNome(nome) {
+        fetch(`/devolucoes/buscar-cliente/${encodeURIComponent(nome)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok && data.clientes) {
+                    mostrarSugestoes(data.clientes);
+                } else {
+                    sugestoesList.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error("Erro na busca:", error);
+                sugestoesList.style.display = 'none';
+            });
+    }
+    
+    function buscarPorId(id) {
+        fetch(`/devolucoes/buscar-cliente/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok && data.cliente) {
+                    mostrarSugestoes([data.cliente]);
+                } else {
+                    sugestoesList.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error("Erro na busca:", error);
+                sugestoesList.style.display = 'none';
+            });
+    }
+    
+    function mostrarSugestoes(clientes) {
+        sugestoesList.innerHTML = '';
+        
+        if (clientes.length === 0) {
+            sugestoesList.style.display = 'none';
+            return;
+        }
+        
+        clientes.forEach((cliente, index) => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item';
+            item.href = '#';
+            item.textContent = `${cliente.id_doador || cliente.doadorId} - ${cliente.nome || cliente.doadorNome}`;
+            item.setAttribute('data-id', cliente.id_doador || cliente.doadorId);
+            item.setAttribute('data-nome', cliente.nome || cliente.doadorNome);
+            item.setAttribute('data-email', cliente.email || cliente.doadorEmail || '');
+            
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                selecionarCliente(this);
+            });
+            
+            // Destacar correspondência
+            const termoBusca = termoBuscaCliente.value.trim().toLowerCase();
+            const nome = cliente.nome || cliente.doadorNome;
+            const nomeDestacado = destacarTexto(nome, termoBusca);
+            item.innerHTML = `${cliente.id_doador || cliente.doadorId} - ${nomeDestacado}`;
+            
+            sugestoesList.appendChild(item);
+        });
+        
+        sugestoesList.style.display = 'block';
+    }
+    
+    function destacarTexto(texto, termo) {
+        const regex = new RegExp(`(${termo})`, 'gi');
+        return texto.replace(regex, '<strong>$1</strong>');
+    }
+    
+    function selecionarCliente(elemento) {
+        const id = elemento.getAttribute('data-id');
+        const nome = elemento.getAttribute('data-nome');
+        const email = elemento.getAttribute('data-email');
+        
+        clienteSelecionado = {
+            id: id,
+            nome: nome,
+            email: email
+        };
+        
+        termoBuscaCliente.value = nome;
+        sugestoesList.style.display = 'none';
+        
+        // Confirmar cliente automaticamente
+        confirmarClienteAutomatico();
+    }
+    
+    function confirmarClienteAutomatico() {
+        clienteId.value = clienteSelecionado.id;
+        clienteNome.textContent = clienteSelecionado.nome;
+        clienteEmail.textContent = clienteSelecionado.email || "Não informado";
+        
+        dadosCliente.style.display = "block";
+        resultadosBusca.style.display = "none";
+        
+        // Carregar pedidos do cliente
+        carregarPedidos(clienteSelecionado.id);
+        
+        mostrarAlerta("Cliente selecionado com sucesso!", "alert-success");
+    }
+    
+    function handleKeyDown(e) {
+        const items = sugestoesList.querySelectorAll('.dropdown-item');
+        let currentIndex = Array.from(items).findIndex(item => item.classList.contains('active'));
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                if (currentIndex < items.length - 1) {
+                    items[currentIndex]?.classList.remove('active');
+                    items[currentIndex + 1]?.classList.add('active');
+                }
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    items[currentIndex]?.classList.remove('active');
+                    items[currentIndex - 1]?.classList.add('active');
+                }
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                const activeItem = sugestoesList.querySelector('.dropdown-item.active');
+                if (activeItem) {
+                    selecionarCliente(activeItem);
+                }
+                break;
+                
+            case 'Escape':
+                sugestoesList.style.display = 'none';
+                break;
+        }
+    }
+    
     function buscarCliente() {
         const termo = termoBuscaCliente.value.trim();
         

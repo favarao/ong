@@ -4,7 +4,6 @@
     <h1>Registro de Devolução</h1>
     
     <div id="alertaMensagem" style="display: none;" class="alert" role="alert">
-        <!-- Mensagens de alerta aparecerão aqui -->
     </div>
 
     <div class="card mb-4">
@@ -14,9 +13,11 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="input-group mb-3">
-                        <input type="text" id="termoBuscaCliente" class="form-control" placeholder="Digite o nome ou ID do cliente">
+                    <div class="input-group mb-3 position-relative">
+                        <input type="text" id="termoBuscaCliente" class="form-control" placeholder="Digite o nome do cliente" autocomplete="off">
                         <button class="btn btn-primary" id="btnBuscarCliente">Buscar</button>
+                        <div id="sugestoesList" class="dropdown-menu w-100" style="position: absolute; top: 100%; z-index: 1000; display: none; max-height: 200px; overflow-y: auto;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,7 +89,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Produtos adicionados aparecerão aqui -->
                         </tbody>
                     </table>
                     
