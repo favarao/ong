@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Tempo de geração: 11/05/2025 às 04:40
+-- Tempo de geração: 12/05/2025 às 04:21
 -- Versão do servidor: 8.0.40
 -- Versão do PHP: 8.2.26
 
@@ -36,15 +36,6 @@ CREATE TABLE `devolucao` (
   `tipo_retorno` enum('produto','dinheiro') NOT NULL DEFAULT 'produto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `devolucao`
---
-
-INSERT INTO `devolucao` (`id_devolucao`, `cliente_id`, `pedido_id`, `data`, `valor`, `tipo_retorno`) VALUES
-(2, 2, 12, '2025-04-28', 610.00, 'dinheiro'),
-(3, 2, 13, '2025-04-28', 690.00, 'produto'),
-(4, 2, 13, '2025-04-28', 460.00, 'dinheiro');
-
 -- --------------------------------------------------------
 
 --
@@ -61,16 +52,6 @@ CREATE TABLE `devolucao_item` (
   `observacao` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `devolucao_item`
---
-
-INSERT INTO `devolucao_item` (`id_devolucao_item`, `devolucao_id`, `produto_id`, `quantidade`, `valor_unitario`, `defeito`, `observacao`) VALUES
-(3, 2, 2, 1, 150.00, 0, ''),
-(4, 2, 3, 2, 230.00, 0, ''),
-(5, 3, 3, 3, 230.00, 0, 'estava apertado'),
-(6, 4, 3, 2, 230.00, 0, 'apertado');
-
 -- --------------------------------------------------------
 
 --
@@ -85,14 +66,6 @@ CREATE TABLE `doacao` (
   `status` varchar(50) DEFAULT 'Agendada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `doacao`
---
-
-INSERT INTO `doacao` (`id_doacao`, `doador_id`, `data`, `valor`, `status`) VALUES
-(1, 7, '2025-04-14', 0.00, 'Agendada'),
-(4, 7, '2025-04-15', 0.00, 'Agendada');
-
 -- --------------------------------------------------------
 
 --
@@ -105,14 +78,6 @@ CREATE TABLE `doacao_item` (
   `produto_id` int NOT NULL,
   `quantidade` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Despejando dados para a tabela `doacao_item`
---
-
-INSERT INTO `doacao_item` (`id_doacao_item`, `doacao_id`, `produto_id`, `quantidade`) VALUES
-(1, 1, 3, 1),
-(3, 4, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -134,14 +99,6 @@ CREATE TABLE `doador` (
   `admin` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `doador`
---
-
-INSERT INTO `doador` (`id_doador`, `nome`, `CPF`, `RG`, `sexo`, `email`, `senha`, `telefone`, `endereco`, `CEP`, `admin`) VALUES
-(2, 'Joao', '256.473.770-68', '41.926.624-0', 'M', 'favaraovieira@gmail.com', '6467', '(18) 99790-6467', 'Rua das Flores, 123', '19010-999', 1),
-(7, 'Lucas', '256.473.770-64', '41.926.624-9', 'M', 'lucas@email.com', '111', '(18) 99790-6688', 'Rua das Flores, 123', '19060-390', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -158,14 +115,6 @@ CREATE TABLE `evento` (
   `projeto_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `evento`
---
-
-INSERT INTO `evento` (`id_evento`, `nome`, `descricao`, `data_inicio`, `data_fim`, `local`, `projeto_id`) VALUES
-(1, 'Eventao', 'Evento muito legal', '2025-02-26 00:00:00', '2025-02-26 00:00:00', 'Casa de eventos', 1),
-(2, 'evento 2', '222', '2025-04-14 00:00:00', '2025-04-14 00:00:00', 'ali', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -180,14 +129,6 @@ CREATE TABLE `patrimonio` (
   `projeto_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `patrimonio`
---
-
-INSERT INTO `patrimonio` (`id_patrimonio`, `nome`, `descricao`, `quantidade`, `projeto_id`) VALUES
-(1, 'Patrimonio', 'Baita patrimonio', 6, 1),
-(2, 'Caneta', 'canetão', 5, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -200,25 +141,6 @@ CREATE TABLE `pedido` (
   `doador_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `pedido`
---
-
-INSERT INTO `pedido` (`ped_id`, `ped_data`, `doador_id`) VALUES
-(1, '2025-02-26 13:06:59', NULL),
-(2, '2025-02-27 15:59:46', NULL),
-(3, '2025-04-14 22:42:48', NULL),
-(4, '2025-04-28 05:05:50', NULL),
-(5, '2025-04-28 05:06:29', NULL),
-(6, '2025-04-28 05:37:28', NULL),
-(7, '2025-04-28 06:01:11', NULL),
-(8, '2025-04-28 06:02:36', NULL),
-(9, '2025-04-28 06:02:49', NULL),
-(10, '2025-04-28 06:04:41', NULL),
-(11, '2025-04-28 06:04:53', NULL),
-(12, '2025-04-28 22:29:51', 2),
-(13, '2025-04-29 00:51:16', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -229,14 +151,6 @@ CREATE TABLE `pedidopatrimonio` (
   `pedpat_id` int NOT NULL,
   `pedpat_data` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Despejando dados para a tabela `pedidopatrimonio`
---
-
-INSERT INTO `pedidopatrimonio` (`pedpat_id`, `pedpat_data`) VALUES
-(1, '2025-04-14 22:30:42'),
-(2, '2025-04-14 22:32:07');
 
 -- --------------------------------------------------------
 
@@ -251,15 +165,6 @@ CREATE TABLE `produto` (
   `preco` decimal(10,2) NOT NULL,
   `quantidade` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Despejando dados para a tabela `produto`
---
-
-INSERT INTO `produto` (`id_produto`, `nome`, `descricao`, `preco`, `quantidade`) VALUES
-(2, 'Camisa de algodo', 'Bem fofinha', 150.00, 46),
-(3, 'Sapato', 'Sapato de couro', 230.00, 54),
-(4, 'produto muito caro', 'carissimo', 99993.00, 37);
 
 -- --------------------------------------------------------
 
@@ -278,14 +183,6 @@ CREATE TABLE `projetos` (
   `status` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `projetos`
---
-
-INSERT INTO `projetos` (`id_projeto`, `nome`, `descricao`, `data_inicio`, `data_fim`, `objetivo`, `orcamento`, `status`) VALUES
-(1, 'Projetinho', 'Um projeto legal', '2025-02-06', '2025-02-18', 'ganhar dinheiro', 55553443.00, '1'),
-(2, 'Projeto 999', 'Projeto quase mil', '2025-04-14', '2025-04-30', 'chegar mil', 2222.00, '1');
-
 -- --------------------------------------------------------
 
 --
@@ -301,29 +198,6 @@ CREATE TABLE `tb_pedidoitens` (
   `pit_valortotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Despejando dados para a tabela `tb_pedidoitens`
---
-
-INSERT INTO `tb_pedidoitens` (`pit_id`, `ped_id`, `id_produto`, `pit_quantidade`, `pit_valorunitario`, `pit_valortotal`) VALUES
-(1, 2, 2, 1, 150.00, 150.00),
-(2, 2, 3, 1, 230.00, 230.00),
-(3, 3, 4, 5, 99993.00, 499965.00),
-(4, 4, 4, 5, 99993.00, 499965.00),
-(5, 5, 4, 3, 99993.00, 299979.00),
-(6, 6, 4, 1, 99993.00, 99993.00),
-(7, 6, 3, 1, 230.00, 230.00),
-(8, 7, 4, 1, 99993.00, 99993.00),
-(9, 7, 3, 1, 230.00, 230.00),
-(10, 7, 2, 1, 150.00, 150.00),
-(11, 8, 4, 1, 99993.00, 99993.00),
-(12, 9, 3, 1, 230.00, 230.00),
-(13, 10, 4, 1, 99993.00, 99993.00),
-(14, 11, 4, 1, 99993.00, 99993.00),
-(15, 12, 3, 2, 230.00, 460.00),
-(16, 12, 2, 1, 150.00, 150.00),
-(17, 13, 3, 5, 230.00, 1150.00);
-
 -- --------------------------------------------------------
 
 --
@@ -336,15 +210,6 @@ CREATE TABLE `tb_pedidoitenspatrimonio` (
   `id_patrimonio` int NOT NULL,
   `pitpat_quantidade` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Despejando dados para a tabela `tb_pedidoitenspatrimonio`
---
-
-INSERT INTO `tb_pedidoitenspatrimonio` (`pitpat_id`, `pedpat_id`, `id_patrimonio`, `pitpat_quantidade`) VALUES
-(1, 1, 1, 1),
-(2, 2, 1, 3),
-(3, 2, 2, 1);
 
 --
 -- Índices para tabelas despejadas
@@ -453,79 +318,79 @@ ALTER TABLE `tb_pedidoitenspatrimonio`
 -- AUTO_INCREMENT de tabela `devolucao`
 --
 ALTER TABLE `devolucao`
-  MODIFY `id_devolucao` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_devolucao` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `devolucao_item`
 --
 ALTER TABLE `devolucao_item`
-  MODIFY `id_devolucao_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_devolucao_item` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `doacao`
 --
 ALTER TABLE `doacao`
-  MODIFY `id_doacao` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_doacao` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `doacao_item`
 --
 ALTER TABLE `doacao_item`
-  MODIFY `id_doacao_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_doacao_item` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `doador`
 --
 ALTER TABLE `doador`
-  MODIFY `id_doador` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_doador` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `id_evento` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_evento` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `patrimonio`
 --
 ALTER TABLE `patrimonio`
-  MODIFY `id_patrimonio` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_patrimonio` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `ped_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ped_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `pedidopatrimonio`
 --
 ALTER TABLE `pedidopatrimonio`
-  MODIFY `pedpat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pedpat_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `id_produto` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_produto` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `projetos`
 --
 ALTER TABLE `projetos`
-  MODIFY `id_projeto` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_projeto` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `tb_pedidoitens`
 --
 ALTER TABLE `tb_pedidoitens`
-  MODIFY `pit_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `pit_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `tb_pedidoitenspatrimonio`
 --
 ALTER TABLE `tb_pedidoitenspatrimonio`
-  MODIFY `pitpat_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `pitpat_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para tabelas despejadas
