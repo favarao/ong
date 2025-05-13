@@ -35,11 +35,11 @@
         </div>
         
         <!-- Botões de Ação -->
-        <div class="mb-3">
+        <div class="mb-3 no-print">
             <button class="btn btn-primary" onclick="window.print()">
                 <i class="fas fa-print"></i> Imprimir Relatório
             </button>
-            <button class="d-none btn btn-success" id="btnExportarExcel">
+            <button class="btn btn-success" id="btnExportarExcel">
                 <i class="fas fa-file-excel"></i> Exportar para Excel
             </button>
         </div>
@@ -56,7 +56,7 @@
                         <th>Status</th>
                         <th>Eventos</th>
                         <th>Patrimônios</th>
-                        <th>Ações</th>
+                        <th class="no-print">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,7 +85,7 @@
                                     <%= lista[i].patrimonios || 0 %> patrimônio(s)
                                 </span>
                             </td>
-                            <td>
+                            <td class="no-print">
                                 <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalProjeto<%= lista[i].projetoId %>">
                                     <i class="fas fa-eye"></i>
                                 </button>
@@ -143,6 +143,53 @@
         <% } %>
     <% } %>
 </div>
+
+<!-- CSS para Impressão -->
+<style>
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: inline !important;
+    }
+    
+    body * {
+        visibility: hidden;
+    }
+    
+    .container, .container * {
+        visibility: visible;
+    }
+    
+    .container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    
+    .badge {
+        color: #000 !important;
+        background-color: transparent !important;
+        border: 1px solid #000 !important;
+    }
+    
+    .table {
+        font-size: 12px;
+    }
+    
+    .card {
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+}
+
+.print-only {
+    display: none;
+}
+</style>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
