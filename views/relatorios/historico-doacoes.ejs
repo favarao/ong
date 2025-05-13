@@ -39,7 +39,7 @@
             <button class="btn btn-primary" onclick="window.print()">
                 <i class="fas fa-print"></i> Imprimir Relatório
             </button>
-            <button class="btn btn-success" id="btnExportarExcel">
+            <button class="d-none btn btn-success" id="btnExportarExcel">
                 <i class="fas fa-file-excel"></i> Exportar para Excel
             </button>
         </div>
@@ -59,78 +59,93 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (let i = 0; i < lista.length; i++) { %>
-                        <tr>
-                            <td><%= lista[i].doacaoId %></td>
-                            <td><%= lista[i].doadorNome %></td>
-                            <td><%= new Date(lista[i].doacaoData).toLocaleDateString('pt-BR') %></td>
-                            <td>R$ <%= parseFloat(lista[i].doacaoValor).toFixed(2) %></td>
-                            <td>
-                                <span class="badge bg-<%= lista[i].doacaoStatus === 'Concluída' ? 'success' : 'warning' %>">
-                                    <%= lista[i].doacaoStatus %>
-                                </span>
-                            </td>
-                            <td>
-                                <% if (lista[i].itens && lista[i].itens.length > 0) { %>
-                                    <button class="btn btn-sm btn-outline-info no-print" data-bs-toggle="modal" data-bs-target="#modalItens<%= lista[i].doacaoId %>">
-                                        <i class="fas fa-list"></i> <%= lista[i].itens.length %> item(s)
-                                    </button>
-                                    <!-- Versão para impressão -->
-                                    <span class="print-only"><%= lista[i].itens.length %> item(s)</span>
-                                <% } else { %>
-                                    <span class="text-muted">Sem itens</span>
-                                <% } %>
-                            </td>
-                            <td class="no-print">
-                                <a href="/doacoes/visualizar/<%= lista[i].doacaoId %>" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        
-                        <!-- Modal para mostrar itens da doação -->
-                        <% if (lista[i].itens && lista[i].itens.length > 0) { %>
-                            <div class="modal fade" id="modalItens<%= lista[i].doacaoId %>" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Itens da Doação #<%= lista[i].doacaoId %></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <table class="table table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Produto</th>
-                                                        <th>Quantidade</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <% lista[i].itens.forEach(item => { %>
-                                                        <tr>
-                                                            <td><%= item.produtoNome %></td>
-                                                            <td><%= item.doacaoItemQuantidade %></td>
-                                                        </tr>
-                                                    <% }); %>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <% if (lista && lista.length > 0) { %>
+                        <% for (let i = 0; i < lista.length; i++) { %>
+                            <tr>
+                                <td><%= lista[i].doacaoId %></td>
+                                <td><%= lista[i].doadorNome %></td>
+                                <td><%= new Date(lista[i].doacaoData).toLocaleDateString('pt-BR') %></td>
+                                <td>R$ <%= parseFloat(lista[i].doacaoValor || 0).toFixed(2) %></td>
+                                <td>
+                                    <span class="badge bg-<%= lista[i].doacaoStatus === 'Concluída' ? 'success' : 'warning' %>">
+                                        <%= lista[i].doacaoStatus %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <% if (lista[i].itens && lista[i].itens.length > 0) { %>
+                                        <button class="btn btn-sm btn-outline-info no-print" data-bs-toggle="modal" data-bs-target="#modalItens<%= lista[i].doacaoId %>">
+                                            <i class="fas fa-list"></i> <%= lista[i].itens.length %> item(s)
+                                        </button>
+                                        <!-- Versão para impressão -->
+                                        <span class="print-only"><%= lista[i].itens.length %> item(s)</span>
+                                    <% } else { %>
+                                        <span class="text-muted">Sem itens</span>
+                                    <% } %>
+                                </td>
+                                <td class="no-print">
+                                    <a href="/doacoes/visualizar/<%= lista[i].doacaoId %>" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
                         <% } %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="7" class="text-center">Nenhuma doação encontrada.</td>
+                        </tr>
                     <% } %>
                 </tbody>
             </table>
         </div>
-        
-        <% if (lista.length === 0) { %>
-            <div class="text-center">
-                <p class="text-muted">Nenhuma doação encontrada.</p>
+    <% } %>
+</div>
+
+<!-- Modais para mostrar itens das doações -->
+<% if (typeof lista !== 'undefined' && lista && lista.length > 0) { %>
+    <% for (let i = 0; i < lista.length; i++) { %>
+        <% if (lista[i].itens && lista[i].itens.length > 0) { %>
+            <div class="modal fade" id="modalItens<%= lista[i].doacaoId %>" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Itens da Doação #<%= lista[i].doacaoId %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% lista[i].itens.forEach(item => { %>
+                                        <tr>
+                                            <td>
+                                                <%= typeof item === 'object' && item.produtoNome ? item.produtoNome : 
+                                                    (typeof item.toJSON === 'function' ? item.toJSON().produtoNome : 
+                                                     (item.produtoNome || 'Nome não encontrado')) %>
+                                            </td>
+                                            <td>
+                                                <%= typeof item === 'object' && item.doacaoItemQuantidade ? item.doacaoItemQuantidade : 
+                                                    (typeof item.toJSON === 'function' ? item.toJSON().doacaoItemQuantidade : 
+                                                     (item.doacaoItemQuantidade || 0)) %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         <% } %>
     <% } %>
-</div>
+<% } %>
 
 <!-- CSS para Impressão -->
 <style>
@@ -162,6 +177,7 @@
         color: #000 !important;
         background-color: transparent !important;
         border: 1px solid #000 !important;
+        padding: 2px 6px;
     }
     
     .table {
@@ -171,27 +187,208 @@
     .card {
         border: 1px solid #000;
         page-break-inside: avoid;
+        margin-bottom: 10px;
+    }
+    
+    .modal {
+        display: none !important;
     }
 }
 
 .print-only {
     display: none;
 }
+
+/* Melhorias visuais */
+.table th {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 0.875rem;
+    }
+    
+    .card h2 {
+        font-size: 1.25rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-sm {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Animações */
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.075);
+}
+
+/* Loading state */
+.btn-loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 
+<!-- JavaScript -->
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Exportar para Excel
     document.getElementById("btnExportarExcel").addEventListener("click", function() {
-        // Clona a tabela para remoção da coluna de ações
-        const tabela = document.getElementById("tabelaDoacoes").cloneNode(true);
-        
-        // Remove a última coluna (Ações)
-        tabela.querySelectorAll("th:last-child, td:last-child").forEach(cell => cell.remove());
-        
-        // Gera o Excel
-        const wb = XLSX.utils.table_to_book(tabela);
-        XLSX.writeFile(wb, `relatorio-doacoes-${new Date().toISOString().split('T')[0]}.xlsx`);
+        try {
+            // Mostrar estado de loading
+            this.classList.add('btn-loading');
+            this.disabled = true;
+            
+            // Clona a tabela para remoção da coluna de ações
+            const tabela = document.getElementById("tabelaDoacoes").cloneNode(true);
+            
+            // Remove a última coluna (Ações)
+            tabela.querySelectorAll("th:last-child, td:last-child").forEach(cell => cell.remove());
+            
+            // Gera o Excel
+            const wb = XLSX.utils.table_to_book(tabela);
+            const fileName = `relatorio-doacoes-${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            
+            // Remove estado de loading
+            setTimeout(() => {
+                this.classList.remove('btn-loading');
+                this.disabled = false;
+            }, 1000);
+        } catch (error) {
+            console.error('Erro ao exportar:', error);
+            alert('Erro ao exportar para Excel. Tente novamente.');
+            this.classList.remove('btn-loading');
+            this.disabled = false;
+        }
     });
+    
+    // Melhorar acessibilidade dos modais
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const modalId = this.getAttribute('data-bs-target');
+            const modal = document.querySelector(modalId);
+            if (modal) {
+                const modalTitle = modal.querySelector('.modal-title');
+                if (modalTitle) {
+                    // Focar no título do modal quando abrir
+                    setTimeout(() => {
+                        modalTitle.focus();
+                    }, 150);
+                }
+            }
+        });
+    });
+    
+    // Validação de dados antes da renderização
+    function validateData() {
+        <% if (typeof lista !== 'undefined' && lista) { %>
+            console.log('Dados carregados:', {
+                totalDoacoes: <%= totalDoacoes %>,
+                valorTotal: <%= valorTotal %>,
+                doacoes: <%= JSON.stringify(lista.map(d => ({
+                    id: d.doacaoId,
+                    doador: d.doadorNome,
+                    valor: d.doacaoValor,
+                    itens: d.itens ? d.itens.length : 0
+                }))) %>
+            });
+        <% } %>
+    }
+    
+    validateData();
+});
+
+// Função para imprimir apenas a tabela
+function printTable() {
+    const printContents = document.querySelector('.container').innerHTML;
+    const originalContents = document.body.innerHTML;
+    
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    
+    // Recarregar a página para restaurar os event listeners
+    location.reload();
+}
+
+// Função para exportar dados em JSON (para debug)
+function exportJSON() {
+    <% if (typeof lista !== 'undefined' && lista) { %>
+        const data = {
+            doacoes: <%= JSON.stringify(lista) %>,
+            resumo: {
+                total: <%= totalDoacoes %>,
+                valorTotal: <%= valorTotal %>
+            }
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dados-doacoes-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    <% } %>
+}
+
+// Adicionar evento de debug (pode ser removido em produção)
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        exportJSON();
+    }
 });
 </script>

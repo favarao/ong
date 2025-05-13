@@ -18,23 +18,206 @@ document.addEventListener("DOMContentLoaded", function() {
     const tabelaProdutos = document.getElementById("tabelaProdutos");
     const btnSalvar = document.getElementById("btnSalvar");
     const alertaMensagem = document.getElementById("alertaMensagem");
+    const sugestoesList = document.getElementById("sugestoesList");
     
     // Lista de produtos para doação
     let produtos = [];
     // Lista de produtos doados
     let produtosDoados = [];
     
+    // Variáveis de controle do autocomplete
+    let timeoutId = null;
+    let doadorSelecionado = null;
+    
     // Event Listeners
+    termoBuscaDoador.addEventListener("input", buscarDoadorAutoComplete);
+    termoBuscaDoador.addEventListener("keydown", handleKeyDown);
+    termoBuscaDoador.addEventListener("click", function() {
+        if (termoBuscaDoador.value.trim().length >= 2) {
+            buscarDoadorAutoComplete();
+        }
+    });
     btnBuscarDoador.addEventListener("click", buscarDoador);
     btnConfirmarDoador.addEventListener("click", confirmarDoador);
     doarProdutos.addEventListener("change", toggleSecaoProdutos);
     btnAdicionarProduto.addEventListener("click", adicionarProduto);
     btnSalvar.addEventListener("click", salvarDoacao);
     
+    // Fechar sugestões ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (!termoBuscaDoador.contains(e.target) && !sugestoesList.contains(e.target)) {
+            sugestoesList.style.display = 'none';
+        }
+    });
+    
     // Carregar produtos disponíveis ao iniciar
     carregarProdutos();
     
-    // Funções
+    // Funções do autocomplete
+    function buscarDoadorAutoComplete() {
+        const termo = termoBuscaDoador.value.trim();
+        
+        if (termo.length < 2) {
+            sugestoesList.style.display = 'none';
+            return;
+        }
+        
+        // Limpar timeout anterior
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        
+        // Aguardar 300ms antes de fazer a busca
+        timeoutId = setTimeout(() => {
+            if (!isNaN(termo) && parseInt(termo) > 0) {
+                // Se for número, buscar por ID
+                buscarPorId(parseInt(termo));
+            } else {
+                // Se for texto, buscar por nome
+                buscarPorNome(termo);
+            }
+        }, 300);
+    }
+    
+    function buscarPorNome(nome) {
+        fetch(`/doacoes/buscar-doador/${encodeURIComponent(nome)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok && data.doadores) {
+                    mostrarSugestoes(data.doadores);
+                } else {
+                    sugestoesList.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error("Erro na busca:", error);
+                sugestoesList.style.display = 'none';
+            });
+    }
+    
+    function buscarPorId(id) {
+        fetch(`/doacoes/buscar-doador/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok && data.doador) {
+                    mostrarSugestoes([data.doador]);
+                } else {
+                    sugestoesList.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error("Erro na busca:", error);
+                sugestoesList.style.display = 'none';
+            });
+    }
+    
+    function mostrarSugestoes(doadores) {
+        sugestoesList.innerHTML = '';
+        
+        if (doadores.length === 0) {
+            sugestoesList.style.display = 'none';
+            return;
+        }
+        
+        doadores.forEach((doador, index) => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item';
+            item.href = '#';
+            item.textContent = `${doador.id_doador} - ${doador.nome}`;
+            item.setAttribute('data-id', doador.id_doador);
+            item.setAttribute('data-nome', doador.nome);
+            item.setAttribute('data-email', doador.email || '');
+            item.setAttribute('data-telefone', doador.telefone || '');
+            
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                selecionarDoador(this);
+            });
+            
+            // Destacar correspondência
+            const termoBusca = termoBuscaDoador.value.trim().toLowerCase();
+            const nome = doador.nome;
+            const nomeDestacado = destacarTexto(nome, termoBusca);
+            item.innerHTML = `${doador.id_doador} - ${nomeDestacado}`;
+            
+            sugestoesList.appendChild(item);
+        });
+        
+        sugestoesList.style.display = 'block';
+    }
+    
+    function destacarTexto(texto, termo) {
+        const regex = new RegExp(`(${termo})`, 'gi');
+        return texto.replace(regex, '<strong>$1</strong>');
+    }
+    
+    function selecionarDoador(elemento) {
+        const id = elemento.getAttribute('data-id');
+        const nome = elemento.getAttribute('data-nome');
+        const email = elemento.getAttribute('data-email');
+        const telefone = elemento.getAttribute('data-telefone');
+        
+        doadorSelecionado = {
+            id: id,
+            nome: nome,
+            email: email,
+            telefone: telefone
+        };
+        
+        termoBuscaDoador.value = nome;
+        sugestoesList.style.display = 'none';
+        
+        // Confirmar doador automaticamente
+        confirmarDoadorAutomatico();
+    }
+    
+    function confirmarDoadorAutomatico() {
+        doadorId.value = doadorSelecionado.id;
+        doadorNome.textContent = doadorSelecionado.nome;
+        doadorEmail.textContent = doadorSelecionado.email || "Não informado";
+        doadorTelefone.textContent = doadorSelecionado.telefone || "Não informado";
+        
+        dadosDoador.style.display = "block";
+        resultadosBusca.style.display = "none";
+        
+        mostrarAlerta("Doador selecionado com sucesso!", "alert-success");
+    }
+    
+    function handleKeyDown(e) {
+        const items = sugestoesList.querySelectorAll('.dropdown-item');
+        let currentIndex = Array.from(items).findIndex(item => item.classList.contains('active'));
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                if (currentIndex < items.length - 1) {
+                    items[currentIndex]?.classList.remove('active');
+                    items[currentIndex + 1]?.classList.add('active');
+                }
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    items[currentIndex]?.classList.remove('active');
+                    items[currentIndex - 1]?.classList.add('active');
+                }
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                const activeItem = sugestoesList.querySelector('.dropdown-item.active');
+                if (activeItem) {
+                    selecionarDoador(activeItem);
+                }
+                break;
+                
+            case 'Escape':
+                sugestoesList.style.display = 'none';
+                break;
+        }
+    }
+    
     function buscarDoador() {
         const termo = termoBuscaDoador.value.trim();
         

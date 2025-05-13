@@ -10,20 +10,20 @@ class RelatorioController {
     // Relatório de Histórico de Doações
     async historicoDoacoesView(req, res) {
         try {
-            // Buscar todas as doações diretamente do banco de dados
             const banco = new Database();
             
-            let sql = `SELECT d.id_doacao, d.doador_id, d.data, d.valor, d.status, 
-                      do.nome AS doador_nome
-                      FROM doacao d 
-                      INNER JOIN doador do ON d.doador_id = do.id_doador 
-                      ORDER BY d.id_doacao DESC`;
+            // Buscar doações
+            let sqlDoacoes = `SELECT d.id_doacao, d.doador_id, d.data, d.valor, d.status, 
+                             do.nome AS doador_nome
+                             FROM doacao d 
+                             INNER JOIN doador do ON d.doador_id = do.id_doador 
+                             ORDER BY d.id_doacao DESC`;
             
-            let rows = await banco.ExecutaComando(sql);
+            let rowsDoacoes = await banco.ExecutaComando(sqlDoacoes);
             let listaDoacoes = [];
-
-            for (let i = 0; i < rows.length; i++) {
-                let row = rows[i];
+    
+            for (let i = 0; i < rowsDoacoes.length; i++) {
+                let row = rowsDoacoes[i];
                 let dataFormatada = row['data'] ? new Date(row['data']).toISOString().split('T')[0] : null;
                 
                 listaDoacoes.push({
@@ -32,18 +32,33 @@ class RelatorioController {
                     doacaoData: dataFormatada,
                     doacaoValor: row['valor'],
                     doacaoStatus: row['status'],
-                    doadorNome: row['doador_nome']
+                    doadorNome: row['doador_nome'],
+                    itens: [] // Inicializar array vazio
                 });
             }
             
-            // Para cada doação, buscar os itens
-            for (let i = 0; i < listaDoacoes.length; i++) {
-                let doacaoItem = new DoacaoItemModel();
-                let itens = await doacaoItem.listarPorDoacao(listaDoacoes[i].doacaoId);
-                listaDoacoes[i].itens = itens;
-            }
+            // Buscar todos os itens de uma vez
+            let sqlItens = `SELECT di.doacao_id, di.produto_id, di.quantidade, p.nome AS produto_nome
+                           FROM doacao_item di
+                           INNER JOIN produto p ON di.produto_id = p.id_produto
+                           WHERE di.doacao_id IN (${listaDoacoes.map(d => d.doacaoId).join(',')})
+                           ORDER BY di.doacao_id, di.id_doacao_item`;
             
-            console.log("Total de doações encontradas:", listaDoacoes.length);
+            if (listaDoacoes.length > 0) {
+                let rowsItens = await banco.ExecutaComando(sqlItens);
+                
+                // Agrupar itens por doação
+                for (let item of rowsItens) {
+                    let doacao = listaDoacoes.find(d => d.doacaoId === item.doacao_id);
+                    if (doacao) {
+                        doacao.itens.push({
+                            produtoId: item.produto_id,
+                            doacaoItemQuantidade: item.quantidade,
+                            produtoNome: item.produto_nome
+                        });
+                    }
+                }
+            }
             
             res.render("relatorios/historico-doacoes", { 
                 lista: listaDoacoes,

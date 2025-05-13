@@ -237,6 +237,78 @@ a.sidebar-link:hover {
     padding: 0 0 0 10px;
 }
 
+/* Estilos para o autocomplete de doações */
+.position-relative {
+    position: relative;
+}
+
+#sugestoesList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-top: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+#sugestoesList .dropdown-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+#sugestoesList .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+#sugestoesList .dropdown-item.active {
+    background-color: #e9ecef;
+}
+
+#sugestoesList .dropdown-item strong {
+    color: #007bff;
+    font-weight: 600;
+}
+
+/* Estilo para o input quando o autocomplete está ativo */
+#termoBuscaDoador.autocomplete-active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Animação suave para as sugestões */
+#sugestoesList {
+    animation: slideDown 0.15s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    #sugestoesList {
+        max-height: 150px;
+    }
+    
+    #sugestoesList .dropdown-item {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
 /* Estilos para dispositivos móveis */
 @media (max-width: 576px) {
     .dropdown-menu {

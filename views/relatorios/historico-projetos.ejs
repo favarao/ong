@@ -39,7 +39,7 @@
             <button class="btn btn-primary" onclick="window.print()">
                 <i class="fas fa-print"></i> Imprimir Relatório
             </button>
-            <button class="btn btn-success" id="btnExportarExcel">
+            <button class="d-none btn btn-success" id="btnExportarExcel">
                 <i class="fas fa-file-excel"></i> Exportar para Excel
             </button>
         </div>
@@ -72,7 +72,7 @@
                             <td>R$ <%= parseFloat(lista[i].projetoOrcamento || 0).toFixed(2) %></td>
                             <td>
                                 <span class="badge bg-<%= lista[i].projetoStatu === 'Concluído' ? 'success' : lista[i].projetoStatu === 'Em Andamento' ? 'primary' : 'warning' %>">
-                                    <%= lista[i].projetoStatu %>
+                                    <%= lista[i].projetoStatu === '1' ? 'Ativo' : 'Desativado' %>
                                 </span>
                             </td>
                             <td>
