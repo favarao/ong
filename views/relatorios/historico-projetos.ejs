@@ -1,6 +1,39 @@
 <div class="container">
     <h1 class="text-secondary mb-4">Relatório - Histórico de Projetos</h1>
     
+    <!-- Formulário de Filtros -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-filter"></i> Filtros de Pesquisa
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="/relatorios/projetos" id="formFiltros">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="dataInicio" class="form-label">Data de Início do Projeto:</label>
+                        <input type="date" class="form-control" id="dataInicio" name="dataInicio" 
+                               value="<%= (typeof filtros !== 'undefined' && filtros && filtros.dataInicio) ? filtros.dataInicio : '' %>">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="dataFim" class="form-label">Data de Fim do Projeto:</label>
+                        <input type="date" class="form-control" id="dataFim" name="dataFim" 
+                               value="<%= (typeof filtros !== 'undefined' && filtros && filtros.dataFim) ? filtros.dataFim : '' %>">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        <a href="/relatorios/projetos" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Limpar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <% if (typeof erro !== 'undefined' && erro) { %>
         <div class="alert alert-danger">
             <%= erro %>
@@ -35,14 +68,33 @@
         </div>
         
         <!-- Botões de Ação -->
-        <div class="mb-3 no-print">
-            <button class="btn btn-primary" onclick="window.print()">
+        <div class="mb-3">
+            <button class="btn btn-primary" onclick="imprimirRelatorio()">
                 <i class="fas fa-print"></i> Imprimir Relatório
             </button>
-            <button class="d-none btn btn-success" id="btnExportarExcel">
-                <i class="fas fa-file-excel"></i> Exportar para Excel
+            <button class="btn btn-success" onclick="exportarCsv()">
+                <i class="fas fa-file-csv"></i> Exportar CSV
+            </button>
+            <button class="d-none btn btn-info" id="btnExportarExcel">
+                <i class="fas fa-file-excel"></i> Exportar Excel
             </button>
         </div>
+        
+        <!-- Informações do Filtro Aplicado -->
+        <% if (typeof filtros !== 'undefined' && filtros && (filtros.dataInicio || filtros.dataFim)) { %>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Filtros aplicados:</strong>
+                <% if (filtros.dataInicio && filtros.dataFim) { %>
+                    Projetos com início entre <%= new Date(filtros.dataInicio).toLocaleDateString('pt-BR') %> 
+                    e <%= new Date(filtros.dataFim).toLocaleDateString('pt-BR') %>
+                <% } else if (filtros.dataInicio) { %>
+                    Projetos com início a partir de <%= new Date(filtros.dataInicio).toLocaleDateString('pt-BR') %>
+                <% } else if (filtros.dataFim) { %>
+                    Projetos com início até <%= new Date(filtros.dataFim).toLocaleDateString('pt-BR') %>
+                <% } %>
+            </div>
+        <% } %>
         
         <!-- Tabela de Projetos -->
         <div class="table-responsive">
@@ -53,157 +105,287 @@
                         <th>Nome</th>
                         <th>Período</th>
                         <th>Orçamento (R$)</th>
-                        <th>Status</th>
                         <th>Eventos</th>
                         <th>Patrimônios</th>
                         <th class="no-print">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (let i = 0; i < lista.length; i++) { %>
-                        <tr>
-                            <td><%= lista[i].projetoId %></td>
-                            <td><%= lista[i].projetoNome %></td>
-                            <td>
-                                <%= new Date(lista[i].projetoDataInic).toLocaleDateString('pt-BR') %> 
-                                - 
-                                <%= new Date(lista[i].projetoDataFim).toLocaleDateString('pt-BR') %>
-                            </td>
-                            <td>R$ <%= parseFloat(lista[i].projetoOrcamento || 0).toFixed(2) %></td>
-                            <td>
-                                <span class="badge bg-<%= lista[i].projetoStatu === 'Concluído' ? 'success' : lista[i].projetoStatu === 'Em Andamento' ? 'primary' : 'warning' %>">
-                                    <%= lista[i].projetoStatu === '1' ? 'Ativo' : 'Desativado' %>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-info">
-                                    <%= lista[i].eventos || 0 %> evento(s)
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    <%= lista[i].patrimonios || 0 %> patrimônio(s)
-                                </span>
-                            </td>
-                            <td class="no-print">
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalProjeto<%= lista[i].projetoId %>">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <!-- Modal para detalhes do projeto -->
-                        <div class="modal fade" id="modalProjeto<%= lista[i].projetoId %>" tabindex="-1">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Detalhes do Projeto: <%= lista[i].projetoNome %></h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h6><strong>Descrição:</strong></h6>
-                                                <p><%= lista[i].projetoDescricao %></p>
+                    <% if (lista && lista.length > 0) { %>
+                        <% for (let i = 0; i < lista.length; i++) { %>
+                            <tr>
+                                <td><%= lista[i].projetoId %></td>
+                                <td><%= lista[i].projetoNome %></td>
+                                <td>
+                                    <%= new Date(lista[i].projetoDataInic).toLocaleDateString('pt-BR') %> 
+                                    - 
+                                    <%= new Date(lista[i].projetoDataFim).toLocaleDateString('pt-BR') %>
+                                </td>
+                                <td>R$ <%= parseFloat(lista[i].projetoOrcamento || 0).toFixed(2) %></td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        <%= lista[i].eventos || 0 %> evento(s)
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        <%= lista[i].patrimonios || 0 %> patrimônio(s)
+                                    </span>
+                                </td>
+                                <td class="no-print">
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalProjeto<%= lista[i].projetoId %>">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Modal para detalhes do projeto -->
+                            <div class="modal fade" id="modalProjeto<%= lista[i].projetoId %>" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Detalhes do Projeto: <%= lista[i].projetoNome %></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6><strong>Descrição:</strong></h6>
+                                                    <p><%= lista[i].projetoDescricao %></p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6><strong>Objetivo:</strong></h6>
+                                                    <p><%= lista[i].projetoObjetivo %></p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <h6><strong>Objetivo:</strong></h6>
-                                                <p><%= lista[i].projetoObjetivo %></p>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h6><strong>Data de Início:</strong></h6>
+                                                    <p><%= new Date(lista[i].projetoDataInic).toLocaleDateString('pt-BR') %></p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6><strong>Data de Fim:</strong></h6>
+                                                    <p><%= new Date(lista[i].projetoDataFim).toLocaleDateString('pt-BR') %></p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6><strong>Status:</strong></h6>
+                                                    <span class="badge bg-<%= lista[i].projetoStatu === 'Concluído' ? 'success' : lista[i].projetoStatu === 'Em Andamento' ? 'primary' : 'warning' %>">
+                                                        <%= lista[i].projetoStatu %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <h6><strong>Estatísticas:</strong></h6>
+                                                    <ul class="list-unstyled">
+                                                        <li><i class="fas fa-calendar-alt text-info"></i> <%= lista[i].eventos || 0 %> eventos associados</li>
+                                                        <li><i class="fas fa-box text-secondary"></i> <%= lista[i].patrimonios || 0 %> patrimônios vinculados</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6><strong>Orçamento:</strong></h6>
+                                                    <p class="h5 text-success">R$ <%= parseFloat(lista[i].projetoOrcamento || 0).toFixed(2) %></p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h6><strong>Data de Início:</strong></h6>
-                                                <p><%= new Date(lista[i].projetoDataInic).toLocaleDateString('pt-BR') %></p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6><strong>Data de Fim:</strong></h6>
-                                                <p><%= new Date(lista[i].projetoDataFim).toLocaleDateString('pt-BR') %></p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6><strong>Status:</strong></h6>
-                                                <span class="badge bg-<%= lista[i].projetoStatu === 'Concluído' ? 'success' : lista[i].projetoStatu === 'Em Andamento' ? 'primary' : 'warning' %>">
-                                                    <%= lista[i].projetoStatu %>
-                                                </span>
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                            <a href="/projetos/alterar/<%= lista[i].projetoId %>" class="btn btn-primary">
+                                                <i class="fas fa-edit"></i> Editar Projeto
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <% } %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center">Nenhum projeto encontrado.</td>
+                        </tr>
                     <% } %>
                 </tbody>
             </table>
         </div>
-        
-        <% if (lista.length === 0) { %>
-            <div class="text-center">
-                <p class="text-muted">Nenhum projeto encontrado.</p>
-            </div>
-        <% } %>
     <% } %>
 </div>
 
-<!-- CSS para Impressão -->
+<!-- CSS personalizado -->
 <style>
-@media print {
-    .no-print {
-        display: none !important;
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.075);
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+.btn-loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 0.875rem;
     }
     
-    .print-only {
-        display: inline !important;
+    .card h2 {
+        font-size: 1.25rem;
     }
     
-    body * {
-        visibility: hidden;
+    .table-responsive {
+        font-size: 0.875rem;
     }
     
-    .container, .container * {
-        visibility: visible;
-    }
-    
-    .container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-    
-    .badge {
-        color: #000 !important;
-        background-color: transparent !important;
-        border: 1px solid #000 !important;
-    }
-    
-    .table {
-        font-size: 12px;
-    }
-    
-    .card {
-        border: 1px solid #000;
-        page-break-inside: avoid;
+    .btn-sm {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.75rem;
     }
 }
 
-.print-only {
-    display: none;
+.modal-body .row {
+    margin-bottom: 1rem;
+}
+
+.modal-body h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.modal-body p {
+    margin-bottom: 0;
+    color: #6c757d;
+}
+
+.list-unstyled li {
+    padding: 0.25rem 0;
 }
 </style>
 
+<!-- JavaScript -->
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("btnExportarExcel").addEventListener("click", function() {
-        // Clona a tabela para remoção da coluna de ações
-        const tabela = document.getElementById("tabelaProjetos").cloneNode(true);
-        
-        // Remove a última coluna (Ações)
-        tabela.querySelectorAll("th:last-child, td:last-child").forEach(cell => cell.remove());
-        
-        // Gera o Excel
-        const wb = XLSX.utils.table_to_book(tabela);
-        XLSX.writeFile(wb, `relatorio-projetos-${new Date().toISOString().split('T')[0]}.xlsx`);
+    // Configurar datas máximas/mínimas
+    const dataInicio = document.getElementById('dataInicio');
+    const dataFim = document.getElementById('dataFim');
+    
+    // Validar que data fim não seja menor que data início
+    dataInicio.addEventListener('change', function() {
+        dataFim.min = this.value;
+        if (dataFim.value && dataFim.value < this.value) {
+            dataFim.value = this.value;
+        }
     });
+    
+    dataFim.addEventListener('change', function() {
+        dataInicio.max = this.value;
+        if (dataInicio.value && dataInicio.value > this.value) {
+            dataInicio.value = this.value;
+        }
+    });
+    
+    // Exportar para Excel (se necessário)
+    const btnExcel = document.getElementById("btnExportarExcel");
+    if (btnExcel) {
+        btnExcel.addEventListener("click", function() {
+            try {
+                this.classList.add('btn-loading');
+                this.disabled = true;
+                
+                const tabela = document.getElementById("tabelaProjetos").cloneNode(true);
+                tabela.querySelectorAll("th:last-child, td:last-child").forEach(cell => cell.remove());
+                
+                const wb = XLSX.utils.table_to_book(tabela);
+                const fileName = `relatorio-projetos-${new Date().toISOString().split('T')[0]}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                
+                setTimeout(() => {
+                    this.classList.remove('btn-loading');
+                    this.disabled = false;
+                }, 1000);
+            } catch (error) {
+                console.error('Erro ao exportar:', error);
+                alert('Erro ao exportar para Excel. Tente novamente.');
+                this.classList.remove('btn-loading');
+                this.disabled = false;
+            }
+        });
+    }
+});
+
+// Função para imprimir em nova página
+function imprimirRelatorio() {
+    const params = new URLSearchParams(window.location.search);
+    const url = '/relatorios/projetos/imprimir?' + params.toString();
+    
+    const printWindow = window.open(url, '_blank', 'width=800,height=600');
+    printWindow.onload = function() {
+        printWindow.print();
+    };
+}
+
+// Função para exportar CSV
+function exportarCsv() {
+    const params = new URLSearchParams(window.location.search);
+    const url = '/relatorios/projetos/csv?' + params.toString();
+    
+    window.location.href = url;
+}
+
+// Melhorar acessibilidade dos modais
+document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+    button.addEventListener('click', function() {
+        const modalId = this.getAttribute('data-bs-target');
+        const modal = document.querySelector(modalId);
+        if (modal) {
+            const modalTitle = modal.querySelector('.modal-title');
+            if (modalTitle) {
+                setTimeout(() => {
+                    modalTitle.focus();
+                }, 150);
+            }
+        }
+    });
+});
+
+// Validação do formulário
+document.getElementById('formFiltros').addEventListener('submit', function(e) {
+    const dataInicio = document.getElementById('dataInicio').value;
+    const dataFim = document.getElementById('dataFim').value;
+    
+    if (dataInicio && dataFim && dataInicio > dataFim) {
+        e.preventDefault();
+        alert('A data de início não pode ser maior que a data de fim.');
+        return false;
+    }
 });
 </script>

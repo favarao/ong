@@ -16,6 +16,14 @@ router.use(authMiddleware.verificarAdmin);
 router.get('/doacoes', relatorioController.historicoDoacoesView);
 router.get('/projetos', relatorioController.historicoProjetosView);
 
+// Rotas para impressão em nova página
+router.get('/doacoes/imprimir', relatorioController.imprimirDoacoes);
+router.get('/projetos/imprimir', relatorioController.imprimirProjetos);
+
+// Rotas para exportação CSV
+router.get('/doacoes/csv', relatorioController.exportarDoacoesCsv);
+router.get('/projetos/csv', relatorioController.exportarProjetosCsv);
+
 // Rotas para exportação (futuro)
 router.get('/doacoes/pdf', relatorioController.exportarDoacoesPdf);
 router.get('/projetos/pdf', relatorioController.exportarProjetosPdf);
